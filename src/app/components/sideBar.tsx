@@ -115,7 +115,6 @@ const SideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
     if (pathname.includes("/file-manager")) return ["file-manager"];
     if (pathname.includes("/chat")) return ["chat"];
     if (pathname.includes("/calendar")) return ["calendar"];
-
     return [];
   };
 
@@ -129,7 +128,6 @@ const SideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
     ) {
       return ["e-commerce"];
     }
-
     return [];
   };
 

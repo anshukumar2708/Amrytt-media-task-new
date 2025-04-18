@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Layout } from "antd";
 import Sidebar from "./components/sideBar";
 import Header from "./components/header";
+import ThreeDotsLoader from "./components/loading";
 
 const { Content } = Layout;
 
@@ -32,6 +33,7 @@ export default function RootLayout({
 }>) {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Check if the screen is mobile
   useEffect(() => {
@@ -48,23 +50,35 @@ export default function RootLayout({
     // Cleanup
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-          <Layout
-            style={{
-              marginLeft: isMobile ? 0 : collapsed ? 80 : 220,
-              transition: "margin-left 0.2s",
-            }}
-          >
-            <Header />
-            <Content className="bg-gray-50 p-4 md:p-6">{children}</Content>
+        {loading && <ThreeDotsLoader />}
+
+        {!loading && (
+          <Layout style={{ minHeight: "100vh" }}>
+            <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+            <Layout
+              style={{
+                marginLeft: isMobile ? 0 : collapsed ? 80 : 220,
+                transition: "margin-left 0.2s",
+              }}
+            >
+              <Header />
+              <Content className="bg-gray-50 p-4 md:p-6">{children}</Content>
+            </Layout>
           </Layout>
-        </Layout>
+        )}
       </body>
     </html>
   );

@@ -617,7 +617,7 @@ const Dashboard: React.FC = () => {
 
       {/* Recent Orders and Customer Growth */}
       <Row gutter={[16, 16]}>
-        <Col xs={24} lg={16}>
+        {/* <Col xs={24} lg={16}>
           <Card
             title="Recent Orders"
             extra={
@@ -646,7 +646,7 @@ const Dashboard: React.FC = () => {
               rowKey="product"
             />
           </Card>
-        </Col>
+        </Col> */}
         <Col xs={24} lg={8}>
           <Card
             // bordered={false}
