@@ -19,6 +19,10 @@ import {
   EyeOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+import TotalIcon from "../all-icons/total-icon";
+import ProgressIcon from "../all-icons/progress-icon";
+import FinishedIcon from "../all-icons/finished-icon";
+import { UnFinishedIcon } from "../all-icons/un-finished-icon";
 
 const Dashboard: React.FC = () => {
   // Sample data for charts
@@ -240,18 +244,7 @@ const Dashboard: React.FC = () => {
                 Total Project
               </h3>
               <div className="ml-auto bg-blue-100 text-blue-600 p-2 rounded-md">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M7 3.5H3.5V7H7V3.5Z" fill="#2563EB" />
-                  <path d="M12.5 3.5H9V7H12.5V3.5Z" fill="#2563EB" />
-                  <path d="M7 9H3.5V12.5H7V9Z" fill="#2563EB" />
-                  <path d="M12.5 9H9V12.5H12.5V9Z" fill="#2563EB" />
-                </svg>
+                <TotalIcon />
               </div>
             </div>
             <h2 className="text-3xl font-semibold mb-2">6,784</h2>
@@ -268,22 +261,7 @@ const Dashboard: React.FC = () => {
                 In Progress
               </h3>
               <div className="ml-auto bg-orange-100 text-orange-600 p-2 rounded-md">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 2.5C4.96243 2.5 2.5 4.96243 2.5 8C2.5 11.0376 4.96243 13.5 8 13.5C11.0376 13.5 13.5 11.0376 13.5 8C13.5 4.96243 11.0376 2.5 8 2.5ZM8 12.3333C5.60993 12.3333 3.66667 10.3901 3.66667 8C3.66667 5.60993 5.60993 3.66667 8 3.66667C10.3901 3.66667 12.3333 5.60993 12.3333 8C12.3333 10.3901 10.3901 12.3333 8 12.3333Z"
-                    fill="#F97316"
-                  />
-                  <path
-                    d="M8.58333 5.16667H7.41667V8.29167L9.77083 10.6458L10.6458 9.77083L8.58333 7.70833V5.16667Z"
-                    fill="#F97316"
-                  />
-                </svg>
+                <ProgressIcon />
               </div>
             </div>
             <h2 className="text-3xl font-semibold mb-2">1,920</h2>
@@ -303,21 +281,7 @@ const Dashboard: React.FC = () => {
                 Finished
               </h3>
               <div className="ml-auto bg-green-100 text-green-600 p-2 rounded-md">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13.3333 4L6 11.3333L2.66667 8"
-                    stroke="#16A34A"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <FinishedIcon />
               </div>
             </div>
             <h2 className="text-3xl font-semibold mb-2">4,412</h2>
@@ -337,28 +301,7 @@ const Dashboard: React.FC = () => {
                 Unfinished
               </h3>
               <div className="ml-auto bg-red-100 text-red-600 p-2 rounded-md">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4L4 12"
-                    stroke="#DC2626"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4 4L12 12"
-                    stroke="#DC2626"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <UnFinishedIcon />
               </div>
             </div>
             <h2 className="text-3xl font-semibold mb-2">329</h2>
