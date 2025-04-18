@@ -19,10 +19,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import TotalIcon from "../all-icons/total-icon";
-import ProgressIcon from "../all-icons/progress-icon";
-import FinishedIcon from "../all-icons/finished-icon";
-import { UnFinishedIcon } from "../all-icons/un-finished-icon";
+import CounterCards from "./counter-cards";
 
 const Dashboard: React.FC = () => {
   // Sample data for charts
@@ -233,86 +230,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <Row gutter={[16, 16]} className="mb-6">
-        <Col xs={24} sm={12} lg={6}>
-          <Card
-            //   bordered={false}
-            className="h-full"
-          >
-            <div className="flex items-center mb-2">
-              <h3 className="text-base font-medium text-gray-600 m-0">
-                Total Project
-              </h3>
-              <div className="ml-auto bg-blue-100 text-blue-600 p-2 rounded-md">
-                <TotalIcon />
-              </div>
-            </div>
-            <h2 className="text-3xl font-semibold mb-2">6,784</h2>
-            <div className="flex items-center text-sm">
-              <span className="text-green-500 mr-1">10%</span>
-              <span className="text-gray-500">+$150 today</span>
-            </div>
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="h-full">
-            <div className="flex items-center mb-2">
-              <h3 className="text-base font-medium text-gray-600 m-0">
-                In Progress
-              </h3>
-              <div className="ml-auto bg-orange-100 text-orange-600 p-2 rounded-md">
-                <ProgressIcon />
-              </div>
-            </div>
-            <h2 className="text-3xl font-semibold mb-2">1,920</h2>
-            <div className="flex items-center text-sm">
-              <span className="text-green-500 mr-1">10%</span>
-              <span className="text-gray-500">+$150 today</span>
-            </div>
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card
-            //   bordered={false}
-            className="h-full"
-          >
-            <div className="flex items-center mb-2">
-              <h3 className="text-base font-medium text-gray-600 m-0">
-                Finished
-              </h3>
-              <div className="ml-auto bg-green-100 text-green-600 p-2 rounded-md">
-                <FinishedIcon />
-              </div>
-            </div>
-            <h2 className="text-3xl font-semibold mb-2">4,412</h2>
-            <div className="flex items-center text-sm">
-              <span className="text-green-500 mr-1">10%</span>
-              <span className="text-gray-500">+$150 today</span>
-            </div>
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card
-            //   bordered={false}
-            className="h-full"
-          >
-            <div className="flex items-center mb-2">
-              <h3 className="text-base font-medium text-gray-600 m-0">
-                Unfinished
-              </h3>
-              <div className="ml-auto bg-red-100 text-red-600 p-2 rounded-md">
-                <UnFinishedIcon />
-              </div>
-            </div>
-            <h2 className="text-3xl font-semibold mb-2">329</h2>
-            <div className="flex items-center text-sm">
-              <span className="text-green-500 mr-1">10%</span>
-              <span className="text-gray-500">+$150 today</span>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-
+      <CounterCards />
       {/* Charts Row */}
       <Row gutter={[16, 16]} className="mb-6">
         <Col xs={24} lg={8}>
