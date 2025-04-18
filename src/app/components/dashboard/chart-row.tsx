@@ -1,19 +1,29 @@
-import { ArrowUpOutlined, MoreOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Progress, Row } from "antd";
+import { useEffect, useState } from "react";
+import { ArrowUpOutlined } from "@ant-design/icons";
+import { Col, Row } from "antd";
 import {
-  AreaChart,
-  Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import SemiCircleProgressBar from "react-progressbar-semicircle";
+import CardsLayout from "../common/cards-layout";
+
+type RechartsMouseEvent = {
+  isTooltipActive?: boolean;
+  activeTooltipIndex?: number;
+};
 
 const ChartRow = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const revenueData = [
-    { name: "Jan", revenue: 400, sales: 240 },
-    { name: "Feb", revenue: 500, sales: 320 },
+    { name: "Jan", revenue: 100, sales: 240 },
+    { name: "Feb", revenue: 200, sales: 320 },
     { name: "Mar", revenue: 450, sales: 280 },
     { name: "Apr", revenue: 470, sales: 250 },
     { name: "May", revenue: 400, sales: 320 },
@@ -26,32 +36,45 @@ const ChartRow = () => {
     { name: "Dec", revenue: 620, sales: 420 },
   ];
 
+  const handleMouseMove = (state: RechartsMouseEvent) => {
+    if (state.isTooltipActive && typeof state.activeTooltipIndex === "number") {
+      setActiveIndex(state.activeTooltipIndex);
+    }
+  };
+
+  useEffect(() => {
+    setActiveIndex(revenueData.length - 1);
+  }, []);
+
   return (
     <Row gutter={[16, 16]} className="mb-6">
       <Col xs={24} lg={8}>
-        <Card
-          title="Target"
-          extra={<Button type="text" icon={<MoreOutlined />} />}
-          className="h-full"
-        >
-          <div className="text-center relative mb-2">
-            <Progress
-              type="dashboard"
-              percent={75.55}
-              strokeColor="#2563EB"
-              format={() => (
-                <>
-                  <div className="text-2xl font-bold">75.55%</div>
-                  <div className="text-xs text-green-500">+10%</div>
-                </>
-              )}
-            />
+        <CardsLayout title="Target" subtitle="Revenue Target">
+          <div className="text-center relative mb-2 flex flex-col justify-center items-center">
+            <div className="relative w-fit">
+              <SemiCircleProgressBar
+                percentage={75.55}
+                showPercentValue={false}
+                stroke="#2086BF"
+                background="#f3f4f6"
+                diameter={200}
+                strokeWidth={10}
+                strokeLinecap="round"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center mt-8">
+                <span className="text-2xl font-bold text-black">75.6%</span>
+                <span className="text-[10px] text-[#1A9882] bg-[#E9FAF7] p-0.5 rounded-sm">
+                  +10%
+                </span>
+              </div>
+            </div>
             <div className="text-sm text-gray-500 mt-2">
-              You succeed earn <span className="font-medium">$240</span> today,
+              You succeed earn{" "}
+              <span className="font-medium text-black">$240</span> today,
               it&apos;s higher than yesterday
             </div>
           </div>
-          <div className="grid grid-cols-3 mt-4 pt-4 border-t border-gray-100">
+          <div className="grid grid-cols-3 mt-4 pt-4">
             {[
               { label: "Target", value: "$20k" },
               { label: "Revenue", value: "$16k" },
@@ -65,37 +88,43 @@ const ChartRow = () => {
               </div>
             ))}
           </div>
-        </Card>
+        </CardsLayout>
       </Col>
 
       <Col xs={24} lg={16}>
-        <Card
-          // bordered={false}
-          title="Statistic"
-          extra={<Button type="text" icon={<MoreOutlined />} />}
-          className="h-full"
-        >
-          <div className="mb-4 text-xs text-gray-500">Revenue and Sales</div>
-          <div style={{ height: 240 }}>
+        <div className="bg-white rounded-md shadow-sm p-4 h-full">
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-full">
+              <h2 className="text-lg font-semibold">Statistic</h2>
+              <div className="w-full flex justify-between items-center">
+                <p className="text-sm text-gray-500">Revenue and Sales</p>
+                <div className="flex justify-start">
+                  <div className="flex items-center mr-4">
+                    <div className="w-2 h-2 rounded-full bg-blue-600 mr-1"></div>
+                    <span className="text-xs">Revenue</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 rounded-full bg-orange-600 mr-1"></div>
+                    <span className="text-xs">Sales</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ height: 200 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
+              <LineChart
                 data={revenueData}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                onMouseMove={handleMouseMove}
               >
-                <defs>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563EB" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#F97316" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#F97316" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} />
                 <YAxis axisLine={false} tickLine={false} />
                 <Tooltip
+                  active={true}
+                  payload={[revenueData[activeIndex]]}
+                  label={revenueData[activeIndex]?.name}
                   contentStyle={{
                     backgroundColor: "#333",
                     border: "none",
@@ -106,34 +135,26 @@ const ChartRow = () => {
                   itemStyle={{ color: "white" }}
                   labelStyle={{ marginBottom: "5px", fontWeight: "bold" }}
                 />
-                <Area
+                <Line
                   type="monotone"
                   dataKey="revenue"
                   stroke="#2563EB"
-                  fillOpacity={1}
-                  fill="url(#colorRevenue)"
+                  strokeWidth={2}
+                  activeDot={{ r: 6 }}
+                  isAnimationActive={false}
                 />
-                <Area
+                <Line
                   type="monotone"
                   dataKey="sales"
                   stroke="#F97316"
-                  fillOpacity={1}
-                  fill="url(#colorSales)"
+                  strokeWidth={2}
+                  activeDot={{ r: 6 }}
+                  isAnimationActive={false}
                 />
-              </AreaChart>
+              </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-start mt-2">
-            <div className="flex items-center mr-4">
-              <div className="w-2 h-2 rounded-full bg-blue-600 mr-1"></div>
-              <span className="text-xs">Revenue</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-orange-600 mr-1"></div>
-              <span className="text-xs">Sales</span>
-            </div>
-          </div>
-        </Card>
+        </div>
       </Col>
     </Row>
   );
