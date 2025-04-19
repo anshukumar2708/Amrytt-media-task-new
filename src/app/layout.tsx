@@ -54,7 +54,7 @@ export default function RootLayout({
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 

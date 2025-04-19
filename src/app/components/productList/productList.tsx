@@ -15,6 +15,7 @@ import ExportIcon from "../all-icons/export-icon";
 import EditColumn from "../all-icons/edit-column";
 import CalenderIcon from "../all-icons/calender-icon";
 import FilterIcon from "../all-icons/filter-icon";
+import { Pagination } from "../fuctionality/pagination";
 
 interface IProduct {
   id: number;
@@ -32,6 +33,12 @@ interface IProduct {
 const ProductList: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [activeTab, setActiveTab] = useState<string>("All Product");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalItems = 100;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // Sample product data
   const products = [
@@ -355,13 +362,17 @@ const ProductList: React.FC = () => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={products}
+            pagination={false}
             rowKey="id"
-            // pagination={{
-            //   total: 100,
-            //   showTotal: (total) => `Showing 1-10 from ${total}`,
-            //   showSizeChanger: false,
-            // }}
           />
+          {/* Pagination component */}
+          <div className="w-full min-w-[600px]">
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalItems}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </div>
       </Card>
     </div>

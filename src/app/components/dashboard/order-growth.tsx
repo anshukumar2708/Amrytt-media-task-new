@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Button, Table, Avatar } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
@@ -7,6 +7,7 @@ import FilterIcon from "../all-icons/filter-icon";
 import CalenderIcon from "../all-icons/calender-icon";
 import CardsLayout from "../common/cards-layout";
 import { UserOutlined } from "@ant-design/icons";
+import { Pagination } from "../fuctionality/pagination";
 
 type IOrder = {
   product: string;
@@ -19,7 +20,13 @@ type IOrder = {
 };
 
 const OrderGrowth = () => {
-  //   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalItems = 100;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   // Sample data for recent orders
   const recentOrders = [
     {
@@ -233,17 +240,20 @@ const OrderGrowth = () => {
               pagination={false}
               rowKey="product"
             />
-            {/* <Pagination
-              totalPages={10}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-            /> */}
+            {/* Pagination component */}
+            <div className="w-full min-w-[600px]">
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalItems}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </>
         </div>
       </Col>
       <Col xs={24} lg={8}>
         <CardsLayout title="Customer Growth" subtitle="Based on Country">
-          <div style={{ height: 250 }} className="mb-4">
+          <div style={{ height: 200 }} className="mb-4">
             {/* <Image
                 src="/lovable-uploads/01cca40a-9204-4653-8ead-ae962bda7bcb.png"
                 alt="World Map"
