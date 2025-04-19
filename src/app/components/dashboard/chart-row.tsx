@@ -10,8 +10,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import SemiCircleProgressBar from "react-progressbar-semicircle";
+// import SemiCircleProgressBar from "react-progressbar-semicircle";
 import CardsLayout from "../common/cards-layout";
+import { SemiCircleProgress } from "../fuctionality/sem-circle-graph";
 
 type RechartsMouseEvent = {
   isTooltipActive?: boolean;
@@ -43,8 +44,8 @@ const ChartRow = () => {
   };
 
   useEffect(() => {
-    setActiveIndex(revenueData.length - 1);
-  }, []);
+    setActiveIndex(revenueData?.length - 1);
+  }, [revenueData.length]);
 
   return (
     <Row gutter={[16, 16]} className="mb-6">
@@ -52,7 +53,7 @@ const ChartRow = () => {
         <CardsLayout title="Target" subtitle="Revenue Target">
           <div className="text-center relative mb-2 flex flex-col justify-center items-center">
             <div className="relative w-fit">
-              <SemiCircleProgressBar
+              {/* <SemiCircleProgressBar
                 percentage={75.55}
                 showPercentValue={false}
                 stroke="#2086BF"
@@ -60,9 +61,10 @@ const ChartRow = () => {
                 diameter={200}
                 strokeWidth={10}
                 strokeLinecap="round"
-              />
+              /> */}
+              <SemiCircleProgress percentage={75.55} />
               <div className="absolute inset-0 flex flex-col items-center justify-center mt-8">
-                <span className="text-2xl font-bold text-black">75.6%</span>
+                <span className="text-2xl font-bold text-black">75.75%</span>
                 <span className="text-[10px] text-[#1A9882] bg-[#E9FAF7] p-0.5 rounded-sm">
                   +10%
                 </span>

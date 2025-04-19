@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Form, Input, Button, Select, Upload, Tag, Checkbox } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditor } from "../rich-text-editor/rich-text-editor";
@@ -11,6 +11,34 @@ import { useParams } from "next/navigation";
 
 const { Option } = Select;
 
+type IVariation = {
+  type: string;
+  value: string;
+};
+
+type IProductFormValues = {
+  name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  status: string;
+  price: number;
+  discountType: string;
+  discountPercentage: number;
+  taxClass: string;
+  vatAmount: number;
+  sku: string;
+  barcode: string;
+  quantity: number;
+  variationTypes: string[];
+  variations: IVariation[];
+  isPhysical: boolean;
+  weight: number;
+  height: number;
+  length: number;
+  width: number;
+};
+
 const ProductForm: React.FC = () => {
   //   const navigate = useNavigate();
   const { id } = useParams();
@@ -21,43 +49,40 @@ const ProductForm: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
 
   // Sample product data for edit mode
-  const productData = isEditMode
-    ? {
-        name: "Smartwatch E2",
-        description:
-          "Smartwatch for men women notify you incoming calls, SMS notifications, when you connect the smartphone with fitness tracker. Connect fitness tracker with your phone, you will never miss a call and a message. The smart watches for android phones will vibrate to alert you if your phone receives any notifications. You can reject calls and view message directly from your watch. A best gift for family and friends.",
-        category: "Watch",
-        tags: ["Watch", "Gadget"],
-        status: "Published",
-        price: 400.0,
-        discountType: "No Discount",
-        discountPercentage: 0,
-        taxClass: "Tax Free",
-        vatAmount: 0,
-        sku: "302002",
-        barcode: "0984939101123",
-        quantity: 124,
-        variationTypes: ["Color"],
-        variations: [
-          { type: "Color", value: "Black" },
-          { type: "Color", value: "Gray" },
-        ],
-        isPhysical: true,
-        weight: 0.25,
-        height: 10,
-        length: 10,
-        width: 7,
-      }
-    : undefined;
+  const productData = {
+    name: "Smartwatch E2",
+    description:
+      "Smartwatch for men women notify you incoming calls, SMS notifications, when you connect the smartphone with fitness tracker. Connect fitness tracker with your phone, you will never miss a call and a message. The smart watches for android phones will vibrate to alert you if your phone receives any notifications. You can reject calls and view message directly from your watch. A best gift for family and friends.",
+    category: "Watch",
+    tags: ["Watch", "Gadget"],
+    status: "Published",
+    price: 400.0,
+    discountType: "No Discount",
+    discountPercentage: 0,
+    taxClass: "Tax Free",
+    vatAmount: 0,
+    sku: "302002",
+    barcode: "0984939101123",
+    quantity: 124,
+    variationTypes: ["Color"],
+    variations: [
+      { type: "Color", value: "Black" },
+      { type: "Color", value: "Gray" },
+    ],
+    isPhysical: true,
+    weight: 0.25,
+    height: 10,
+    length: 10,
+    width: 7,
+  };
 
-  // Initialize form with product data if in edit mode
-  React.useEffect(() => {
-    if (isEditMode && productData) {
+  useEffect(() => {
+    if (isEditMode) {
       form.setFieldsValue(productData);
     }
-  }, [form, isEditMode, productData]);
+  }, [form, isEditMode]);
 
-  const handleFormSubmit = (values: any) => {
+  const handleFormSubmit = (values: IProductFormValues) => {
     console.log("Form values:", values);
     // navigate("/product");
   };
@@ -96,7 +121,7 @@ const ProductForm: React.FC = () => {
   const removeVariation = (index: number) => {
     const variations = form.getFieldValue("variations") || [];
     form.setFieldsValue({
-      variations: variations.filter((_: any, i: number) => i !== index),
+      variations: variations.filter((_: IVariation, i: number) => i !== index),
     });
   };
 
@@ -272,7 +297,7 @@ const ProductForm: React.FC = () => {
             {/* Variation */}
             <Card title="Variation">
               <Form.List name="variations">
-                {(fields, { add, remove }) => (
+                {(fields) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
                       <div
