@@ -1,34 +1,37 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Card,
-  Table,
-  Button,
-  Input,
-  Select,
-  Avatar,
-  Tag,
-  //   Dropdown,
-  Checkbox,
-} from "antd";
+import { Card, Table, Button, Input, Avatar, Tag, Tooltip } from "antd";
 import {
   SearchOutlined,
-  FilterOutlined,
-  ExportOutlined,
-  //   MoreOutlined,
   EditOutlined,
   EyeOutlined,
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-// import { useNavigate } from "react-router-dom";
+import { ColumnsType } from "antd/es/table";
+import Link from "next/link";
+import RightArrow from "../all-icons/right-arrow";
+import ExportIcon from "../all-icons/export-icon";
+import EditColumn from "../all-icons/edit-column";
+import CalenderIcon from "../all-icons/calender-icon";
+import FilterIcon from "../all-icons/filter-icon";
 
-const { Option } = Select;
+interface IProduct {
+  id: number;
+  name: string;
+  variants: number;
+  image: string;
+  sku: string;
+  category: string;
+  stock: number;
+  price: string;
+  status: string;
+  added: string;
+}
 
 const ProductList: React.FC = () => {
-  //   const navigate = useNavigate();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState<string>("All Product");
 
   // Sample product data
   const products = [
@@ -36,7 +39,7 @@ const ProductList: React.FC = () => {
       id: 1,
       name: "Handmade Pouch",
       variants: 3,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "302012",
       category: "Bag & Pouch",
       stock: 10,
@@ -48,7 +51,7 @@ const ProductList: React.FC = () => {
       id: 2,
       name: "Smartwatch E2",
       variants: 2,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "302011",
       category: "Watch",
       stock: 204,
@@ -60,7 +63,7 @@ const ProductList: React.FC = () => {
       id: 3,
       name: "Smartwatch E1",
       variants: 3,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "302002",
       category: "Watch",
       stock: 48,
@@ -72,7 +75,7 @@ const ProductList: React.FC = () => {
       id: 4,
       name: "Headphone G1 Pro",
       variants: 1,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301901",
       category: "Audio",
       stock: 401,
@@ -84,7 +87,7 @@ const ProductList: React.FC = () => {
       id: 5,
       name: "Iphone X",
       variants: 4,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301900",
       category: "Smartphone",
       stock: 120,
@@ -96,7 +99,7 @@ const ProductList: React.FC = () => {
       id: 6,
       name: "Puma Shoes",
       variants: 3,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301881",
       category: "Shoes",
       stock: 432,
@@ -108,7 +111,7 @@ const ProductList: React.FC = () => {
       id: 7,
       name: "Logic+ Wireless Mouse",
       variants: 1,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301643",
       category: "Mouse",
       stock: 0,
@@ -120,7 +123,7 @@ const ProductList: React.FC = () => {
       id: 8,
       name: "Nike Shoes",
       variants: 3,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301600",
       category: "Shoes",
       stock: 347,
@@ -132,7 +135,7 @@ const ProductList: React.FC = () => {
       id: 9,
       name: "Lego Car",
       variants: 2,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301555",
       category: "Toys",
       stock: 299,
@@ -144,7 +147,7 @@ const ProductList: React.FC = () => {
       id: 10,
       name: "PS Wireless Controller",
       variants: 3,
-      image: "/lovable-uploads/64853f68-934d-45db-bb9a-9a82c59bd58c.png",
+      image: "",
       sku: "301002",
       category: "Beauty",
       stock: 38,
@@ -165,47 +168,13 @@ const ProductList: React.FC = () => {
     return statusMap[status] || "blue";
   };
 
-  // Handle adding a new product
-  const handleAddProduct = () => {
-    // navigate("/product/add");
-  };
-
-  // Handle editing a product
-  const handleEditProduct = (id: number) => {
-    // navigate(`/product/edit/${id}`);
-  };
-
   // Table columns
-  const columns = [
-    // {
-    //   title: () => (
-    //     <Checkbox
-    //       indeterminate={
-    //         selectedRowKeys.length > 0 &&
-    //         selectedRowKeys.length < products.length
-    //       }
-    //       checked={selectedRowKeys.length === products.length}
-    //       onChange={() => {
-    //         if (selectedRowKeys.length === products.length) {
-    //           setSelectedRowKeys([]);
-    //         } else {
-    //           setSelectedRowKeys(products.map((item) => item.id));
-    //         }
-    //       }}
-    //     />
-    //   ),
-    //   dataIndex: "id",
-    //   key: "checkbox",
-    //   width: 40,
-    //   render: (_: any, record: any) => (
-    //     <Checkbox checked={selectedRowKeys.includes(record.id)} />
-    //   ),
-    // },
+  const columns: ColumnsType<IProduct> = [
     {
       title: "Product",
       dataIndex: "name",
       key: "name",
-      render: (text: string, record: any) => (
+      render: (text: string, record: IProduct) => (
         <div className="flex items-center">
           <Avatar
             src={record.image}
@@ -236,17 +205,15 @@ const ProductList: React.FC = () => {
       title: "Stock",
       dataIndex: "stock",
       key: "stock",
-      sorter: (a: any, b: any) => a.stock - b.stock,
+      sorter: (a, b) => a.stock - b.stock,
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      sorter: (a: any, b: any) => {
-        const aPrice = parseFloat(a.price.replace("$", ""));
-        const bPrice = parseFloat(b.price.replace("$", ""));
-        return aPrice - bPrice;
-      },
+      sorter: (a, b) =>
+        parseFloat(a.price.replace("$", "")) -
+        parseFloat(b.price.replace("$", "")),
     },
     {
       title: "Status",
@@ -258,22 +225,25 @@ const ProductList: React.FC = () => {
       title: "Added",
       dataIndex: "added",
       key: "added",
-      sorter: (a: any, b: any) =>
+      sorter: (a, b) =>
         new Date(a.added).getTime() - new Date(b.added).getTime(),
     },
     {
       title: "Action",
       key: "action",
-      render: (_: any, record: any) => (
+      render: (_: IProduct, record: IProduct) => (
         <div className="flex gap-2">
-          <Button
-            type="text"
-            size="small"
-            icon={<EditOutlined />}
-            onClick={() => handleEditProduct(record.id)}
-          />
-          <Button type="text" size="small" icon={<EyeOutlined />} />
-          <Button type="text" size="small" icon={<DeleteOutlined />} />
+          <Tooltip title="Edit" color="#2086BF">
+            <Link href={`/edit-product/:${record?.id}`}>
+              <Button type="text" size="small" icon={<EditOutlined />} />
+            </Link>
+          </Tooltip>
+          <Tooltip title="View" color="#2086BF">
+            <Button type="text" size="small" icon={<EyeOutlined />} />
+          </Tooltip>
+          <Tooltip title="Delete" color="#2086BF">
+            <Button type="text" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
         </div>
       ),
     },
@@ -287,118 +257,112 @@ const ProductList: React.FC = () => {
     },
   };
 
+  const productTypeData = [
+    {
+      id: 1,
+      title: "All Product",
+    },
+    {
+      id: 2,
+      title: "Published",
+    },
+    {
+      id: 3,
+      title: "Low Stock",
+    },
+    {
+      id: 4,
+      title: "Draft",
+    },
+  ];
+
   return (
     <div className="product-page">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-semibold mb-1">Product</h1>
           <div className="text-sm text-gray-500 flex items-center">
-            <span className="hover:text-blue-500 cursor-pointer">
+            <Link
+              href="/"
+              className="hover:text-blue-500 cursor-pointer text-[#2086BF]"
+            >
               Dashboard
+            </Link>
+            <span className="mx-1">
+              <RightArrow width={10} height={10} />
             </span>
-            <span className="mx-2">•</span>
             <span className="text-gray-800">Product List</span>
           </div>
         </div>
         <div className="flex mt-4 md:mt-0">
-          <Button icon={<ExportOutlined />} className="mr-2">
+          <Button icon={<ExportIcon />} className="mr-2">
             Export
           </Button>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAddProduct}
-          >
-            Add Product
-          </Button>
+          <Link href="/add-product">
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              // onClick={handleAddProduct}
+            >
+              Add Product
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <Card
-      //   bordered={false}
-      >
-        <div className="mb-4 flex flex-wrap border-b">
-          <div
-            className={`mr-6 pb-3 px-1 cursor-pointer ${
-              activeTab === "all"
-                ? "border-b-2 border-blue-500 text-blue-500 font-medium"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("all")}
-          >
-            All Product
-          </div>
-          <div
-            className={`mr-6 pb-3 px-1 cursor-pointer ${
-              activeTab === "published"
-                ? "border-b-2 border-blue-500 text-blue-500 font-medium"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("published")}
-          >
-            Published
-          </div>
-          <div
-            className={`mr-6 pb-3 px-1 cursor-pointer ${
-              activeTab === "lowStock"
-                ? "border-b-2 border-blue-500 text-blue-500 font-medium"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("lowStock")}
-          >
-            Low Stock
-          </div>
-          <div
-            className={`mr-6 pb-3 px-1 cursor-pointer ${
-              activeTab === "draft"
-                ? "border-b-2 border-blue-500 text-blue-500 font-medium"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("draft")}
-          >
-            Draft
-          </div>
+      {/* filter select-date edit-column search */}
+      <div className="mb-4 flex flex-col xl:flex-row xl:justify-between xl:items-center max-xl:gap-3">
+        <div className="size-max flex justify-start items-center gap-2 border border-[#E0E2E7] px-2 py-[4px] rounded-md">
+          {productTypeData?.map((item, index) => {
+            return (
+              <p
+                className={`cursor-pointer text-sm hover:text-[#2086BF] hover:bg-[#EAF8FF] ${
+                  activeTab === item?.title && "text-[#2086BF] bg-[#EAF8FF]"
+                } px-2 py-[1px] rounded-sm`}
+                key={index}
+                onClick={() => setActiveTab(item?.title)}
+              >
+                {item?.title}
+              </p>
+            );
+          })}
         </div>
-
-        <div className="mb-4 flex flex-col md:flex-row justify-between gap-3">
-          <div className="flex-1 md:max-w-md">
+        <div className="flex flex-wrap gap-2">
+          <div className="flex-1 md:max-w-md min-w-24">
             <Input
               placeholder="Search product..."
               prefix={<SearchOutlined className="text-gray-400" />}
               className="rounded-md"
             />
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button icon={<FilterOutlined />} className="flex items-center">
-              Filters
-            </Button>
-            <Select
-              className="min-w-[180px]"
-              placeholder="Select Date"
-              allowClear
-            >
-              <Option value="today">Today</Option>
-              <Option value="yesterday">Yesterday</Option>
-              <Option value="thisWeek">This Week</Option>
-              <Option value="lastWeek">Last Week</Option>
-              <Option value="thisMonth">This Month</Option>
-              <Option value="lastMonth">Last Month</Option>
-            </Select>
-            <Button>Edit Column</Button>
-          </div>
+          <Button size="middle">
+            <CalenderIcon width={16} height={16} />
+            Select Date
+          </Button>
+          <Button size="middle" className="ml-2">
+            <FilterIcon />
+            Filters
+          </Button>
+          <Button size="middle">
+            <EditColumn /> Edit Column
+          </Button>
         </div>
+      </div>
 
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={products}
-          rowKey="id"
-          pagination={{
-            total: 100,
-            showTotal: (total) => `Showing 1-10 from ${total}`,
-            showSizeChanger: false,
-          }}
-        />
+      <Card>
+        <div className="w-full overflow-x-auto">
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={products}
+            rowKey="id"
+            // pagination={{
+            //   total: 100,
+            //   showTotal: (total) => `Showing 1-10 from ${total}`,
+            //   showSizeChanger: false,
+            // }}
+          />
+        </div>
       </Card>
     </div>
   );
