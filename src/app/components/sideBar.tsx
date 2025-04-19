@@ -156,14 +156,15 @@ const SideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
           </div>
         )}
       </div>
-      <Menu
-        mode="inline"
-        selectedKeys={getSelectedKeys()}
-        defaultOpenKeys={getOpenKeys()}
-        style={{ borderRight: 0 }}
-        items={menuItems}
-        className="h-full"
-      />
+      <div className="h-full overflow-y-auto pb-16">
+        <Menu
+          mode="inline"
+          selectedKeys={getSelectedKeys()}
+          defaultOpenKeys={getOpenKeys()}
+          items={menuItems}
+          className="border-none"
+        />
+      </div>
     </>
   );
 
@@ -187,8 +188,8 @@ const SideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
           onClose={() => setMobileDrawerOpen(false)}
           open={mobileDrawerOpen}
           width={250}
-          //   bodyStyle={{ padding: 0 }}
-          //   headerStyle={{ display: "none" }}
+          className="!overflow-hidden"
+          bodyStyle={{ overflow: "hidden", padding: 0 }}
         >
           {sidebarContent}
         </Drawer>
@@ -201,14 +202,13 @@ const SideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
-      className="bg-white min-h-screen"
+      className="bg-white h-screen overflow-hidden"
       width={220}
       collapsedWidth={80}
       style={{
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.05)",
         zIndex: 100,
         position: "fixed",
-        height: "100%",
         transition: "all 0.2s",
       }}
     >
