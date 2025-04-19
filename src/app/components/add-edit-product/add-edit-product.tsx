@@ -19,13 +19,17 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { RichTextEditor } from "../rich-text-editor/rich-text-editor";
+import Link from "next/link";
+import RightArrow from "../all-icons/right-arrow";
+import SaveIcon from "../all-icons/save-icon";
+import CancelIcon from "../all-icons/cancel-icon";
 
 const { Option } = Select;
 
 const ProductForm: React.FC = () => {
   //   const navigate = useNavigate();
   //   const { id } = useParams();
-  const isEditMode = true;
+  const isEditMode = false;
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>(["Watch", "Gadget"]);
   const [inputVisible, setInputVisible] = useState(false);
@@ -112,43 +116,51 @@ const ProductForm: React.FC = () => {
   };
 
   return (
-    <div className="product-form-page">
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center">
+    <div className="w-full">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div>
           <h1 className="text-2xl font-semibold mb-1">
             {isEditMode ? "Edit Product" : "Add Product"}
           </h1>
+
+          <div className="text-sm text-gray-500 flex items-center">
+            <Link
+              href="/"
+              className="hover:text-blue-500 cursor-pointer text-[#2086BF]"
+            >
+              Dashboard
+            </Link>
+            <span className="mx-2">
+              <RightArrow />
+            </span>
+            <Link
+              href="/product"
+              className="hover:text-blue-500 cursor-pointer text-[#2086BF]"
+            >
+              Product List
+            </Link>
+            <span className="mx-2">
+              <RightArrow />
+            </span>
+            <span className="text-gray-800">
+              {isEditMode ? "Edit Product" : "Add Product"}
+            </span>
+          </div>
         </div>
         <div className="flex mt-4 md:mt-0 gap-2">
-          <Button
-          //   onClick={() => navigate("/product")}
-          >
+          <Button>
+            <CancelIcon />
             Cancel
           </Button>
-          <Button type="primary" onClick={() => form.submit()}>
+          <Button
+            // icon={<SaveIcon />}
+            type="primary"
+            onClick={() => form.submit()}
+          >
+            <SaveIcon />
             {isEditMode ? "Save Product" : "Add Product"}
           </Button>
         </div>
-      </div>
-
-      <div className="text-sm text-gray-500 flex items-center mb-6">
-        <span
-          className="hover:text-blue-500 cursor-pointer"
-          //   onClick={() => navigate("/")}
-        >
-          Dashboard
-        </span>
-        <span className="mx-2">•</span>
-        <span
-          className="hover:text-blue-500 cursor-pointer"
-          //   onClick={() => navigate("/product")}
-        >
-          Product List
-        </span>
-        <span className="mx-2">•</span>
-        <span className="text-gray-800">
-          {isEditMode ? "Edit Product" : "Add Product"}
-        </span>
       </div>
 
       <Form
@@ -160,7 +172,7 @@ const ProductForm: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             {/* General Information */}
-            <Card bordered={false} title="General Information">
+            <Card title="General Information">
               <Form.Item
                 name="name"
                 label="Product Name"
@@ -186,7 +198,7 @@ const ProductForm: React.FC = () => {
             </Card>
 
             {/* Media */}
-            <Card bordered={false} title="Media">
+            <Card title="Media">
               <Form.Item name="images" label="Photo">
                 <Upload
                   listType="picture-card"
@@ -206,7 +218,7 @@ const ProductForm: React.FC = () => {
             </Card>
 
             {/* Pricing */}
-            <Card bordered={false} title="Pricing">
+            <Card title="Pricing">
               <Form.Item
                 name="price"
                 label="Base Price"
@@ -248,8 +260,8 @@ const ProductForm: React.FC = () => {
             </Card>
 
             {/* Inventory */}
-            <Card bordered={false} title="Inventory">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card title="Inventory">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <Form.Item
                   name="sku"
                   label="SKU"
@@ -259,21 +271,21 @@ const ProductForm: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item name="barcode" label="Barcode">
-                  <Input placeholder="Enter barcode" />
+                  <Input placeholder="Enter Barcode" />
+                </Form.Item>
+
+                <Form.Item
+                  name="quantity"
+                  label="Quantity"
+                  rules={[{ required: true, message: "Please input quantity" }]}
+                >
+                  <Input type="number" min={0} placeholder="Enter Quantity" />
                 </Form.Item>
               </div>
-
-              <Form.Item
-                name="quantity"
-                label="Quantity"
-                rules={[{ required: true, message: "Please input quantity" }]}
-              >
-                <Input type="number" min={0} />
-              </Form.Item>
             </Card>
 
             {/* Variation */}
-            <Card bordered={false} title="Variation">
+            <Card title="Variation">
               <Form.List name="variations">
                 {(fields, { add, remove }) => (
                   <>
@@ -326,12 +338,12 @@ const ProductForm: React.FC = () => {
             </Card>
 
             {/* Shipping */}
-            <Card bordered={false} title="Shipping">
+            <Card title="Shipping">
               <Form.Item name="isPhysical" valuePropName="checked">
                 <Checkbox>This is a physical product</Checkbox>
               </Form.Item>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Form.Item name="weight" label="Weight">
                   <Input suffix="kg" type="number" step="0.01" />
                 </Form.Item>
@@ -353,7 +365,7 @@ const ProductForm: React.FC = () => {
 
           <div className="lg:col-span-1 space-y-6">
             {/* Category */}
-            <Card bordered={false} title="Category">
+            <Card title="Category">
               <Form.Item
                 name="category"
                 label="Product Category"
@@ -408,7 +420,7 @@ const ProductForm: React.FC = () => {
             </Card>
 
             {/* Status */}
-            <Card bordered={false} title="Status">
+            <Card title="Status">
               <Form.Item
                 name="status"
                 label="Product Status"
