@@ -1,35 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Select,
-  //   Radio,
-  Upload,
-  Tag,
-  Checkbox,
-  //   Divider,
-  //   InputNumber,
-} from "antd";
-import {
-  //   ArrowLeftOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { Card, Form, Input, Button, Select, Upload, Tag, Checkbox } from "antd";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditor } from "../rich-text-editor/rich-text-editor";
 import Link from "next/link";
 import RightArrow from "../all-icons/right-arrow";
 import SaveIcon from "../all-icons/save-icon";
 import CancelIcon from "../all-icons/cancel-icon";
+import { useParams } from "next/navigation";
 
 const { Option } = Select;
 
 const ProductForm: React.FC = () => {
   //   const navigate = useNavigate();
-  //   const { id } = useParams();
-  const isEditMode = false;
+  const { id } = useParams();
+  const isEditMode = !!id;
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>(["Watch", "Gadget"]);
   const [inputVisible, setInputVisible] = useState(false);
