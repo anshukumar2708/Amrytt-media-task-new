@@ -8,6 +8,7 @@ import CalenderIcon from "../all-icons/calender-icon";
 import CardsLayout from "../common/cards-layout";
 import { UserOutlined } from "@ant-design/icons";
 import { Pagination } from "../fuctionality/pagination";
+import dynamic from "next/dynamic";
 
 type IOrder = {
   product: string;
@@ -197,6 +198,11 @@ const OrderGrowth = () => {
     },
   ];
 
+  // Avoid SSR since `react-simple-maps` relies on browser APIs
+  const WorldMap = dynamic(() => import("../fuctionality/world-map"), {
+    ssr: false,
+  });
+
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} lg={16}>
@@ -254,11 +260,7 @@ const OrderGrowth = () => {
       <Col xs={24} lg={8}>
         <CardsLayout title="Customer Growth" subtitle="Based on Country">
           <div style={{ height: 200 }} className="mb-4">
-            {/* <Image
-                src="/lovable-uploads/01cca40a-9204-4653-8ead-ae962bda7bcb.png"
-                alt="World Map"
-                className="w-full h-full object-contain"
-              /> */}
+            <WorldMap />
           </div>
           <div className="space-y-4">
             {growthData?.map((item, index) => (
