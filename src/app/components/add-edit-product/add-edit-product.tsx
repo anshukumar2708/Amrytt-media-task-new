@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, Form, Input, Button, Select, Upload, Tag, Checkbox } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditor } from "../rich-text-editor/rich-text-editor";
@@ -8,6 +8,11 @@ import RightArrow from "../all-icons/right-arrow";
 import SaveIcon from "../all-icons/save-icon";
 import CancelIcon from "../all-icons/cancel-icon";
 import { useParams } from "next/navigation";
+import { addProduct, Product, updateProduct } from "@/app/redux/productSlice";
+import moment from "moment";
+import { ProductStatus } from "../productList/productList";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
@@ -22,7 +27,7 @@ type IProductFormValues = {
   category: string;
   tags: string[];
   status: string;
-  price: number;
+  price: string;
   discountType: string;
   discountPercentage: number;
   taxClass: string;
@@ -40,51 +45,71 @@ type IProductFormValues = {
 };
 
 const ProductForm: React.FC = () => {
-  //   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = !!id;
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>(["Watch", "Gadget"]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
 
   // Sample product data for edit mode
-  const productData = {
-    name: "Smartwatch E2",
-    description:
-      "Smartwatch for men women notify you incoming calls, SMS notifications, when you connect the smartphone with fitness tracker. Connect fitness tracker with your phone, you will never miss a call and a message. The smart watches for android phones will vibrate to alert you if your phone receives any notifications. You can reject calls and view message directly from your watch. A best gift for family and friends.",
-    category: "Watch",
-    tags: ["Watch", "Gadget"],
-    status: "Published",
-    price: 400.0,
-    discountType: "No Discount",
-    discountPercentage: 0,
-    taxClass: "Tax Free",
-    vatAmount: 0,
-    sku: "302002",
-    barcode: "0984939101123",
-    quantity: 124,
-    variationTypes: ["Color"],
-    variations: [
-      { type: "Color", value: "Black" },
-      { type: "Color", value: "Gray" },
-    ],
-    isPhysical: true,
-    weight: 0.25,
-    height: 10,
-    length: 10,
-    width: 7,
-  };
+  // const productData = {
+  //   name: "Smartwatch E2",
+  //   description:
+  //     "Smartwatch for men women notify you incoming calls, SMS notifications, when you connect the smartphone with fitness tracker. Connect fitness tracker with your phone, you will never miss a call and a message. The smart watches for android phones will vibrate to alert you if your phone receives any notifications. You can reject calls and view message directly from your watch. A best gift for family and friends.",
+  //   category: "Watch",
+  //   tags: ["Watch", "Gadget"],
+  //   status: "Published",
+  //   price: 400.0,
+  //   discountType: "No Discount",
+  //   discountPercentage: 0,
+  //   taxClass: "Tax Free",
+  //   vatAmount: 0,
+  //   sku: "302002",
+  //   barcode: "0984939101123",
+  //   quantity: 124,
+  //   variationTypes: ["Color"],
+  //   variations: [
+  //     { type: "Color", value: "Black" },
+  //     { type: "Color", value: "Gray" },
+  //   ],
+  //   isPhysical: true,
+  //   weight: 0.25,
+  //   height: 10,
+  //   length: 10,
+  //   width: 7,
+  // };
 
-  useEffect(() => {
-    if (isEditMode) {
-      form.setFieldsValue(productData);
-    }
-  }, [form, isEditMode]);
+  // useEffect(() => {
+  //   if (isEditMode) {
+  //     form.setFieldsValue(productData);
+  //   }
+  // }, [form, isEditMode]);
 
   const handleFormSubmit = (values: IProductFormValues) => {
     console.log("Form values:", values);
-    // navigate("/product");
+    const newProduct: Product = {
+      id: Math.random(),
+      name: values.name,
+      variants: 1,
+      image: "",
+      sku: values.sku,
+      category: values.category,
+      stock: 10,
+      price: `$${Number(values.price).toFixed(2)}`,
+      status: values.status as ProductStatus,
+      added: moment().format("DD MMM YYYY"),
+    };
+    console.log("newProduct", newProduct);
+    if (isEditMode) {
+      dispatch(updateProduct(newProduct));
+    } else {
+      dispatch(addProduct(newProduct));
+    }
+    router.push("/product");
+    form.resetFields();
   };
 
   // Handle tag input
@@ -176,7 +201,7 @@ const ProductForm: React.FC = () => {
       <Form
         form={form}
         layout="vertical"
-        initialValues={productData}
+        // initialValues={productData}
         onFinish={handleFormSubmit}
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
