@@ -7,6 +7,8 @@ import { Layout } from "antd";
 import Sidebar from "./components/sideBar";
 import Header from "./components/header";
 import ThreeDotsLoader from "./components/loading";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const { Content } = Layout;
 
@@ -66,18 +68,20 @@ export default function RootLayout({
         {loading && <ThreeDotsLoader />}
 
         {!loading && (
-          <Layout style={{ minHeight: "100vh" }}>
-            <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-            <Layout
-              style={{
-                marginLeft: isMobile ? 0 : collapsed ? 80 : 220,
-                transition: "margin-left 0.2s",
-              }}
-            >
-              <Header />
-              <Content className="bg-gray-50 p-4 md:p-6">{children}</Content>
+          <Provider store={store}>
+            <Layout style={{ minHeight: "100vh" }}>
+              <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+              <Layout
+                style={{
+                  marginLeft: isMobile ? 0 : collapsed ? 80 : 220,
+                  transition: "margin-left 0.2s",
+                }}
+              >
+                <Header />
+                <Content className="bg-gray-50 p-4 md:p-6">{children}</Content>
+              </Layout>
             </Layout>
-          </Layout>
+          </Provider>
         )}
       </body>
     </html>

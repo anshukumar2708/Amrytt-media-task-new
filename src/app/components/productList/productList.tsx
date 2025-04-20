@@ -16,6 +16,15 @@ import EditColumn from "../all-icons/edit-column";
 import CalenderIcon from "../all-icons/calender-icon";
 import FilterIcon from "../all-icons/filter-icon";
 import { Pagination } from "../fuctionality/pagination";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteProduct,
+  setFilterStatus,
+  setSearchTerm,
+} from "@/app/redux/productSlice";
+import { selectFilteredProducts } from "@/app/redux/action";
+
+export type ProductStatus = "All Product" | "Published" | "Low Stock" | "Draft";
 
 interface IProduct {
   id: number;
@@ -26,7 +35,7 @@ interface IProduct {
   category: string;
   stock: number;
   price: string;
-  status: string;
+  status: ProductStatus;
   added: string;
 }
 
@@ -36,133 +45,20 @@ const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalItems = 100;
 
+  const dispatch = useDispatch();
+  const products = useSelector(selectFilteredProducts);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchTerm(e.target.value));
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch(deleteProduct(id));
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  // Sample product data
-  const products = [
-    {
-      id: 1,
-      name: "Handmade Pouch",
-      variants: 3,
-      image: "",
-      sku: "302012",
-      category: "Bag & Pouch",
-      stock: 10,
-      price: "$121.00",
-      status: "Low Stock",
-      added: "29 Dec 2022",
-    },
-    {
-      id: 2,
-      name: "Smartwatch E2",
-      variants: 2,
-      image: "",
-      sku: "302011",
-      category: "Watch",
-      stock: 204,
-      price: "$590.00",
-      status: "Published",
-      added: "24 Dec 2022",
-    },
-    {
-      id: 3,
-      name: "Smartwatch E1",
-      variants: 3,
-      image: "",
-      sku: "302002",
-      category: "Watch",
-      stock: 48,
-      price: "$125.00",
-      status: "Draft",
-      added: "12 Dec 2022",
-    },
-    {
-      id: 4,
-      name: "Headphone G1 Pro",
-      variants: 1,
-      image: "",
-      sku: "301901",
-      category: "Audio",
-      stock: 401,
-      price: "$348.00",
-      status: "Published",
-      added: "21 Oct 2022",
-    },
-    {
-      id: 5,
-      name: "Iphone X",
-      variants: 4,
-      image: "",
-      sku: "301900",
-      category: "Smartphone",
-      stock: 120,
-      price: "$607.00",
-      status: "Published",
-      added: "21 Oct 2022",
-    },
-    {
-      id: 6,
-      name: "Puma Shoes",
-      variants: 3,
-      image: "",
-      sku: "301881",
-      category: "Shoes",
-      stock: 432,
-      price: "$234.00",
-      status: "Published",
-      added: "21 Oct 2022",
-    },
-    {
-      id: 7,
-      name: "Logic+ Wireless Mouse",
-      variants: 1,
-      image: "",
-      sku: "301643",
-      category: "Mouse",
-      stock: 0,
-      price: "$760.00",
-      status: "Out of Stock",
-      added: "19 Sep 2022",
-    },
-    {
-      id: 8,
-      name: "Nike Shoes",
-      variants: 3,
-      image: "",
-      sku: "301600",
-      category: "Shoes",
-      stock: 347,
-      price: "$400.00",
-      status: "Published",
-      added: "19 Sep 2022",
-    },
-    {
-      id: 9,
-      name: "Lego Car",
-      variants: 2,
-      image: "",
-      sku: "301555",
-      category: "Toys",
-      stock: 299,
-      price: "$812.00",
-      status: "Published",
-      added: "19 Sep 2022",
-    },
-    {
-      id: 10,
-      name: "PS Wireless Controller",
-      variants: 3,
-      image: "",
-      sku: "301002",
-      category: "Beauty",
-      stock: 38,
-      price: "$123.00",
-      status: "Draft",
-      added: "10 Aug 2022",
-    },
-  ];
 
   // Status color map
   const getStatusColor = (status: string) => {
@@ -249,7 +145,12 @@ const ProductList: React.FC = () => {
             <Button type="text" size="small" icon={<EyeOutlined />} />
           </Tooltip>
           <Tooltip title="Delete" color="#2086BF">
-            <Button type="text" size="small" icon={<DeleteOutlined />} />
+            <Button
+              type="text"
+              size="small"
+              onClick={() => handleDelete(record?.id)}
+              icon={<DeleteOutlined />}
+            />
           </Tooltip>
         </div>
       ),
@@ -264,7 +165,7 @@ const ProductList: React.FC = () => {
     },
   };
 
-  const productTypeData = [
+  const productTypeData: { id: number; title: ProductStatus }[] = [
     {
       id: 1,
       title: "All Product",
@@ -327,7 +228,10 @@ const ProductList: React.FC = () => {
                   activeTab === item?.title && "text-[#2086BF] bg-[#EAF8FF]"
                 } px-2 py-[1px] rounded-sm`}
                 key={index}
-                onClick={() => setActiveTab(item?.title)}
+                onClick={() => {
+                  setActiveTab(item?.title);
+                  dispatch(setFilterStatus(item?.title));
+                }}
               >
                 {item?.title}
               </p>
@@ -340,6 +244,7 @@ const ProductList: React.FC = () => {
               placeholder="Search product..."
               prefix={<SearchOutlined className="text-gray-400" />}
               className="rounded-md"
+              onChange={handleSearch}
             />
           </div>
           <Button size="middle">
