@@ -3,6 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ProductStatus = "All Product" | "Published" | "Low Stock" | "Draft";
 
+type IVariation = {
+  type: string;
+  value: string;
+};
+
 export interface Product {
   id: number;
   name: string;
@@ -19,7 +24,7 @@ export interface Product {
   barcode: string;
   quantity: number;
   variationTypes: string[];
-  variations: string[];
+  variations: IVariation[];
   isPhysical: boolean;
   stock: number;
   weight: number;
@@ -27,6 +32,8 @@ export interface Product {
   length: number;
   width: number;
   added: string;
+  variants: number;
+  image: string;
 }
 
 interface ProductState {
@@ -53,7 +60,7 @@ const initialState: ProductState = {
       barcode: "1234567890123",
       quantity: 100,
       variationTypes: ["Color", "Storage"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       added: "20 March 2025",
       isPhysical: true,
       stock: 8,
@@ -61,6 +68,8 @@ const initialState: ProductState = {
       height: 15,
       length: 7,
       width: 0.8,
+      variants: 1,
+      image: "",
     },
     {
       id: 2,
@@ -78,7 +87,7 @@ const initialState: ProductState = {
       barcode: "1234567890456",
       quantity: 10,
       variationTypes: ["Color"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 22,
@@ -86,6 +95,8 @@ const initialState: ProductState = {
       height: 3,
       length: 6,
       width: 2,
+      variants: 1,
+      image: "",
     },
     {
       id: 3,
@@ -103,7 +114,7 @@ const initialState: ProductState = {
       barcode: "9876543210123",
       quantity: 50,
       variationTypes: ["Size"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 34,
@@ -111,6 +122,8 @@ const initialState: ProductState = {
       height: 2,
       length: 5,
       width: 1.5,
+      variants: 1,
+      image: "",
     },
     {
       id: 4,
@@ -128,7 +141,7 @@ const initialState: ProductState = {
       barcode: "4567891234567",
       quantity: 200,
       variationTypes: ["Color"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 10,
@@ -136,6 +149,8 @@ const initialState: ProductState = {
       height: 10,
       length: 12,
       width: 1,
+      variants: 1,
+      image: "",
     },
     {
       id: 5,
@@ -153,7 +168,7 @@ const initialState: ProductState = {
       barcode: "3216549870123",
       quantity: 75,
       variationTypes: ["Color"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 19,
@@ -161,6 +176,8 @@ const initialState: ProductState = {
       height: 10,
       length: 15,
       width: 10,
+      variants: 1,
+      image: "",
     },
     {
       id: 6,
@@ -178,7 +195,7 @@ const initialState: ProductState = {
       barcode: "5556667778881",
       quantity: 40,
       variationTypes: ["Size", "Color"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 24,
@@ -186,6 +203,8 @@ const initialState: ProductState = {
       height: 12,
       length: 30,
       width: 10,
+      variants: 1,
+      image: "",
     },
     {
       id: 7,
@@ -203,7 +222,7 @@ const initialState: ProductState = {
       barcode: "1122334455667",
       quantity: 20,
       variationTypes: ["Color"],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 50,
@@ -211,6 +230,8 @@ const initialState: ProductState = {
       height: 100,
       length: 60,
       width: 60,
+      variants: 1,
+      image: "",
     },
     {
       id: 8,
@@ -228,7 +249,7 @@ const initialState: ProductState = {
       barcode: "1111222233334",
       quantity: 15,
       variationTypes: [],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 30,
@@ -236,6 +257,8 @@ const initialState: ProductState = {
       height: 5,
       length: 45,
       width: 20,
+      variants: 1,
+      image: "",
     },
     {
       id: 9,
@@ -253,7 +276,7 @@ const initialState: ProductState = {
       barcode: "0001112223334",
       quantity: 9999,
       variationTypes: [],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: false,
       added: "20 March 2025",
       stock: 20,
@@ -261,6 +284,8 @@ const initialState: ProductState = {
       height: 0,
       length: 0,
       width: 0,
+      variants: 1,
+      image: "",
     },
     {
       id: 10,
@@ -278,7 +303,7 @@ const initialState: ProductState = {
       barcode: "9998887776661",
       quantity: 300,
       variationTypes: [],
-      variations: [],
+      variations: [{ type: "Material", value: "all Good" }],
       isPhysical: true,
       added: "20 March 2025",
       stock: 16,
@@ -286,6 +311,8 @@ const initialState: ProductState = {
       height: 2,
       length: 21,
       width: 14.8,
+      variants: 1,
+      image: "",
     },
   ],
   filterStatus: "All Product",

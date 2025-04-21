@@ -137,7 +137,7 @@ const ProductList: React.FC = () => {
       render: (_: IProduct, record: IProduct) => (
         <div className="flex gap-2">
           <Tooltip title="Edit" color="#2086BF">
-            <Link href={`/edit-product/:${record?.id}`}>
+            <Link href={`/edit-product/${record?.id}`}>
               <Button type="text" size="small" icon={<EditOutlined />} />
             </Link>
           </Tooltip>
@@ -207,11 +207,7 @@ const ProductList: React.FC = () => {
             Export
           </Button>
           <Link href="/add-product">
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              // onClick={handleAddProduct}
-            >
+            <Button type="primary" icon={<PlusOutlined />}>
               Add Product
             </Button>
           </Link>

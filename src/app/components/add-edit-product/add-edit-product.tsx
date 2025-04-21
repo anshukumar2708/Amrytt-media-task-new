@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Form, Input, Button, Select, Upload, Tag, Checkbox } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditor } from "../rich-text-editor/rich-text-editor";
@@ -11,8 +11,9 @@ import { useParams } from "next/navigation";
 import { addProduct, Product, updateProduct } from "@/app/redux/productSlice";
 import moment from "moment";
 import { ProductStatus } from "../productList/productList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/app/redux/store";
 
 const { Option } = Select;
 
@@ -26,6 +27,7 @@ type IProductFormValues = {
   description: string;
   category: string;
   tags: string[];
+  image: string;
   status: string;
   price: string;
   discountType: string;
@@ -42,67 +44,62 @@ type IProductFormValues = {
   height: number;
   length: number;
   width: number;
+  variants: number;
 };
 
 const ProductForm: React.FC = () => {
-  const { id } = useParams();
-  const isEditMode = !!id;
+  const params = useParams();
+  const productId = params.id;
+  const isEditMode = !!productId;
+  const router = useRouter();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>(["Watch", "Gadget"]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const router = useRouter();
+  const allProductsData = useSelector(
+    (state: RootState) => state.products.list
+  );
 
-  // Sample product data for edit mode
-  // const productData = {
-  //   name: "Smartwatch E2",
-  //   description:
-  //     "Smartwatch for men women notify you incoming calls, SMS notifications, when you connect the smartphone with fitness tracker. Connect fitness tracker with your phone, you will never miss a call and a message. The smart watches for android phones will vibrate to alert you if your phone receives any notifications. You can reject calls and view message directly from your watch. A best gift for family and friends.",
-  //   category: "Watch",
-  //   tags: ["Watch", "Gadget"],
-  //   status: "Published",
-  //   price: 400.0,
-  //   discountType: "No Discount",
-  //   discountPercentage: 0,
-  //   taxClass: "Tax Free",
-  //   vatAmount: 0,
-  //   sku: "302002",
-  //   barcode: "0984939101123",
-  //   quantity: 124,
-  //   variationTypes: ["Color"],
-  //   variations: [
-  //     { type: "Color", value: "Black" },
-  //     { type: "Color", value: "Gray" },
-  //   ],
-  //   isPhysical: true,
-  //   weight: 0.25,
-  //   height: 10,
-  //   length: 10,
-  //   width: 7,
-  // };
+  useEffect(() => {
+    if (productId && allProductsData && Array.isArray(allProductsData)) {
+      const editData = allProductsData.find(
+        (item) => Number(item.id) === Number(productId)
+      );
+      if (editData) form.setFieldsValue(editData);
+    }
+  }, [productId, allProductsData, form]);
 
-  // useEffect(() => {
-  //   if (isEditMode) {
-  //     form.setFieldsValue(productData);
-  //   }
-  // }, [form, isEditMode]);
+  console.log("Math.random()", typeof Math.random());
 
   const handleFormSubmit = (values: IProductFormValues) => {
-    console.log("Form values:", values);
     const newProduct: Product = {
-      id: Math.random(),
+      id: isEditMode ? Number(productId) : Math.random(),
       name: values.name,
       variants: 1,
-      image: "",
+      image: values?.image,
       sku: values.sku,
       category: values.category,
       stock: 10,
       price: `$${Number(values.price).toFixed(2)}`,
       status: values.status as ProductStatus,
       added: moment().format("DD MMM YYYY"),
+      barcode: values?.barcode,
+      description: values?.description,
+      discountPercentage: values?.discountPercentage,
+      discountType: values?.discountType,
+      height: values?.height,
+      isPhysical: values?.isPhysical,
+      length: values?.length,
+      quantity: values?.quantity,
+      tags: values?.tags,
+      taxClass: values?.taxClass,
+      variations: values?.variations,
+      vatAmount: values?.vatAmount,
+      weight: values?.weight,
+      width: values?.weight,
+      variationTypes: values?.variationTypes,
     };
-    console.log("newProduct", newProduct);
     if (isEditMode) {
       dispatch(updateProduct(newProduct));
     } else {
