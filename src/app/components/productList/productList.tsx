@@ -11,7 +11,6 @@ import {
 import { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import RightArrow from "../all-icons/right-arrow";
-import ExportIcon from "../all-icons/export-icon";
 import EditColumn from "../all-icons/edit-column";
 import CalenderIcon from "../all-icons/calender-icon";
 import FilterIcon from "../all-icons/filter-icon";
@@ -23,26 +22,48 @@ import {
   setSearchTerm,
 } from "@/app/redux/productSlice";
 import { selectFilteredProducts } from "@/app/redux/action";
+import DataExport from "../fuctionality/DataExport";
 
 export type ProductStatus = "All Product" | "Published" | "Low Stock" | "Draft";
+
+interface Variation {
+  type: string;
+  value: string;
+}
 
 interface IProduct {
   id: number;
   name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  status: ProductStatus;
+  price: string;
+  discountType: string;
+  discountPercentage: number;
+  taxClass: string;
+  vatAmount: number;
+  sku: string;
+  barcode: string;
+  quantity: number;
+  variationTypes: string[];
+  variations: Variation[];
+  added: string;
+  isPhysical: boolean;
+  stock: number;
+  weight: number;
+  height: number;
+  length: number;
+  width: number;
   variants: number;
   image: string;
-  sku: string;
-  category: string;
-  stock: number;
-  price: string;
-  status: ProductStatus;
-  added: string;
 }
 
 const ProductList: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [activeTab, setActiveTab] = useState<string>("All Product");
   const [currentPage, setCurrentPage] = useState(1);
+  const [exportData, setExportData] = useState<IProduct[]>([]);
   const totalItems = 100;
 
   const dispatch = useDispatch();
@@ -160,8 +181,9 @@ const ProductList: React.FC = () => {
   // Row selection config
   const rowSelection = {
     selectedRowKeys,
-    onChange: (selectedKeys: React.Key[]) => {
+    onChange: (selectedKeys: React.Key[], selectedRows: IProduct[]) => {
       setSelectedRowKeys(selectedKeys);
+      setExportData(selectedRows);
     },
   };
 
@@ -184,6 +206,8 @@ const ProductList: React.FC = () => {
     },
   ];
 
+  console.log("exportData", exportData);
+
   return (
     <div className="product-page">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -203,9 +227,7 @@ const ProductList: React.FC = () => {
           </div>
         </div>
         <div className="flex mt-4 md:mt-0">
-          <Button icon={<ExportIcon />} className="mr-2">
-            Export
-          </Button>
+          <DataExport exportData={exportData} />
           <Link href="/add-product">
             <Button type="primary" icon={<PlusOutlined />}>
               Add Product

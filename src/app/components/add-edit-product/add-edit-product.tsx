@@ -180,7 +180,12 @@ const ProductForm: React.FC = () => {
           </div>
         </div>
         <div className="flex mt-4 md:mt-0 gap-2">
-          <Button>
+          <Button
+            onClick={() => {
+              form.resetFields();
+              router.push("/product");
+            }}
+          >
             <CancelIcon />
             Cancel
           </Button>
